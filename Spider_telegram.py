@@ -14,7 +14,7 @@ inicial = []
 global AsinList
 AsinList = []
 
-TOKEN = '407510413:AAF493v_Tup1995YS82ER9vb0s_YV5Mwxo4'
+TOKEN = ''
 bot = telebot.TeleBot(TOKEN)
 
 #mete la url a la lista global
