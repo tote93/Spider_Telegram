@@ -13,8 +13,8 @@ global inicial
 inicial = []
 global AsinList
 AsinList = []
-#Insertar el token ID obtenido por el bot GodFather En TElegram
-TOKEN = ''
+
+TOKEN = '407510413:AAF493v_Tup1995YS82ER9vb0s_YV5Mwxo4'
 bot = telebot.TeleBot(TOKEN)
 
 #mete la url a la lista global
@@ -84,6 +84,10 @@ def Scraping(url, mensaje):
                     precio = ' '.join(''.join(precio_box.text).split()) if precio_box else 0
                     print "entro a banggood\n"
                 # creo una lista que devuelvo e inserto en otra lista global
+                if(precio.find('$') != -1):
+                    precio= precio.replace("$", '')
+                #if(precio.find('€') != -1):
+                 #   precio = precio.replace("€", '')
                 data = {
                     'NOMBRE': nombre,
                     'PRECIO': precio,
@@ -115,7 +119,7 @@ def Readlist(mensaje):
         bot.send_message(chat_id, 'Sondeando...')
         while True:
             ReadSondeo(mensaje)
-            sleep(20)
+            sleep(300)
         bot.send_message(chat_id, 'El sondeo ha finalizado')
     else:
         bot.send_message(chat_id, 'Primero has de ejecutar /getprecios')
@@ -169,10 +173,12 @@ def SondeoScrap(url, mensaje):
                 precio_box = soup.find('span', attrs={'id': 'priceblock_ourprice'})
                 nombre_box = soup.find('span', attrs={'id': 'productTitle'})
                 nombre = nombre_box.text.replace("\n", '')
-                nombre= nombre.replace("                                                                                                                                                        ","")
-                if precio_box == None:
+
+                precio = ' '.join(''.join(precio_box.text).split()) if precio_box else 0
+                if precio == 0:
                     precio_box = soup.find('span', attrs={'id': 'priceblock_saleprice'})
-                precio = precio_box.text
+                    precio = ' '.join(''.join(precio_box.text).split()) if precio_box else 0
+                print nombre
                 print "Sondeo a amazon\n"
             if url.find('gearbest') != -1:
                 precio_box = soup.find('span', attrs={'class': 'my_shop_price new_shop_price ajax-price'})
@@ -189,16 +195,21 @@ def SondeoScrap(url, mensaje):
                 nombre = nombre_box.text.replace("\n", '')
                 precio = ' '.join(''.join(precio_box.text).split()) if precio_box else 0
                 print "Sondeo a BangGood\n"
-
+            if(precio.find('$') != -1):
+                precio= precio.replace("$", '')
+            #if(precio.find('€') != -1):
+            #   precio = precio.replace("€", '')
             #recorro la lista para buscar el precio mas bajo
             for producto in inicial:
                     if nombre == producto['NOMBRE']:
-                        if precio < producto['PRECIO']:
+                        if float(precio) < float(producto['PRECIO']):
+
                             bot.send_message(mensaje.chat.id, "Producto: " + nombre)
                             bot.send_message(mensaje.chat.id, "Precio Antiguo: " + producto['PRECIO'] + " precio Nuevo: " + precio)
                             bot.send_message(mensaje.chat.id, "Enlace: " + url)
+                            print "El producto tiene menor precio\n"
                         print "Precio Inicial: "+producto['PRECIO'] +"\nPrecio Actual: "+precio+"\n"
-                        return 0
+                        
             return 1
         except Exception as e:
             print e
@@ -240,8 +251,9 @@ def lectura(mensaje):
         inicial.append(leer[i])
     print "Archivo de datos cargado a memoria \n"
     bot.send_message(chat, "Archivo de datos cargado a memoria.")
-
-
+@bot.message_handler(commands=['estado'])
+def Estado(mensaje):
+    bot.send_message(mensaje.chat.id,"Running.\n")
 
 if __name__ == '__main__':
     try:
