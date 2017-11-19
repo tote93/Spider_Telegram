@@ -50,7 +50,7 @@ def Scraping(url, mensaje):
     soup = BeautifulSoup(page, 'html.parser')
 
     while True:
-        sleep(3)
+        sleep(10)
         try:
                 if url.find('pccomponentes') != -1:
                     precio_box = soup.find('span', attrs={'class': 'baseprice'})
@@ -65,7 +65,7 @@ def Scraping(url, mensaje):
                     if precio_box == None:
                         precio_box = soup.find('span', attrs={'id': 'priceblock_saleprice'})
                     precio=precio_box.text
-                    nombre = nombre.replace("                                                                                                                                                        ","")
+                    nombre = nombre.replace("  ","")
 
                     print "entro a amazon\n"
                 if url.find('gearbest') != -1:
@@ -83,17 +83,22 @@ def Scraping(url, mensaje):
                     nombre = nombre_box.text.replace("\n", '')
                     precio = ' '.join(''.join(precio_box.text).split()) if precio_box else 0
                     print "entro a banggood\n"
-                # creo una lista que devuelvo e inserto en otra lista global
+                if url.find('mediamarkt') != -1:
+                    precio_box = soup.find("div", attrs={'id': "priceBlock"})
+                    nombre_box = soup.find('h1', attrs={'class': 'mm-text--truncate mm-text--truncate-fallback'})
+                    nombre = nombre_box.text.replace("\n", '')
+                    precio = ' '.join(''.join(precio_box.text).split()) if precio_box else 0
+                    print "entro a mediamarkt\n"
                 if(precio.find('$') != -1):
                     precio= precio.replace("$", '')
                 #if(precio.find('€') != -1):
-                 #   precio = precio.replace("€", '')
+                 #   precio = precio.replace("€", '')                    
+                # creo una lista que devuelvo e inserto en otra lista global
                 data = {
                     'NOMBRE': nombre,
                     'PRECIO': precio,
                     'URL': url,
                 }
-
                 return data
         except Exception as e:
             print e
@@ -119,7 +124,7 @@ def Readlist(mensaje):
         bot.send_message(chat_id, 'Sondeando...')
         while True:
             ReadSondeo(mensaje)
-            sleep(300)
+            sleep(720)
         bot.send_message(chat_id, 'El sondeo ha finalizado')
     else:
         bot.send_message(chat_id, 'Primero has de ejecutar /getprecios')
@@ -173,12 +178,10 @@ def SondeoScrap(url, mensaje):
                 precio_box = soup.find('span', attrs={'id': 'priceblock_ourprice'})
                 nombre_box = soup.find('span', attrs={'id': 'productTitle'})
                 nombre = nombre_box.text.replace("\n", '')
-
                 precio = ' '.join(''.join(precio_box.text).split()) if precio_box else 0
                 if precio == 0:
                     precio_box = soup.find('span', attrs={'id': 'priceblock_saleprice'})
                     precio = ' '.join(''.join(precio_box.text).split()) if precio_box else 0
-                print nombre
                 print "Sondeo a amazon\n"
             if url.find('gearbest') != -1:
                 precio_box = soup.find('span', attrs={'class': 'my_shop_price new_shop_price ajax-price'})
@@ -195,21 +198,25 @@ def SondeoScrap(url, mensaje):
                 nombre = nombre_box.text.replace("\n", '')
                 precio = ' '.join(''.join(precio_box.text).split()) if precio_box else 0
                 print "Sondeo a BangGood\n"
-            if(precio.find('$') != -1):
-                precio= precio.replace("$", '')
+            if url.find('mediamarkt') != -1:
+                precio_box = soup.find("div", attrs={'id': "priceBlock"})
+                nombre_box = soup.find('h1', attrs={'class': 'mm-text--truncate mm-text--truncate-fallback'})
+                nombre = nombre_box.text.replace("\n", '')
+                precio = ' '.join(''.join(precio_box.text).split()) if precio_box else 0
+                print "entro a mediamarkt\n"
+            if (precio.find('$') != -1):
+                precio = precio.replace("$", '')
             #if(precio.find('€') != -1):
             #   precio = precio.replace("€", '')
             #recorro la lista para buscar el precio mas bajo
             for producto in inicial:
                     if nombre == producto['NOMBRE']:
                         if float(precio) < float(producto['PRECIO']):
-
                             bot.send_message(mensaje.chat.id, "Producto: " + nombre)
                             bot.send_message(mensaje.chat.id, "Precio Antiguo: " + producto['PRECIO'] + " precio Nuevo: " + precio)
                             bot.send_message(mensaje.chat.id, "Enlace: " + url)
-                            print "El producto tiene menor precio\n"
                         print "Precio Inicial: "+producto['PRECIO'] +"\nPrecio Actual: "+precio+"\n"
-                        
+                        return 1
             return 1
         except Exception as e:
             print e
@@ -219,7 +226,7 @@ def listener(mensaje):
     try:
         for m in mensaje:
             texto = m.text
-        if texto.find('pccomponentes') != -1 or texto.find('amazon') != -1 or texto.find('gearbest') != -1 or texto.find('banggood') != -1:
+        if texto.find('pccomponentes') != -1 or texto.find('amazon') != -1 or texto.find('gearbest') != -1 or texto.find('banggood') != -1 or texto.find('mediamarkt') != -1:
             print "insertado"
             Insertar(mensaje, texto)
         else:
