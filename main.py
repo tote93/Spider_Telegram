@@ -14,7 +14,7 @@ import FuncAuxiliares
 global array
 
 array = ["/sondear", "/lectura", "/exportar", "/getprecios", "/reiniciar" , "/estado"]
-TOKEN = '407510413:AAFIYZBxBF1mAUK1w0qPnBGU-rts5dJ-II8'
+TOKEN = ''
 bot = telebot.TeleBot(TOKEN)
 
 def listener(mensaje):
