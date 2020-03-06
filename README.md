@@ -17,7 +17,7 @@ It has the following commands:
 /resetear -> Reset the price list.
 
 
-#How to use:
+# How to use:
 If you don't have the products.json file yet:
   1) Put your telegram Token ID, and start the bot next to the bot.py
   2) Paste the complete url in the telegram chat, (you can paste as many urls as you want).
