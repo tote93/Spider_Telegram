@@ -1,31 +1,31 @@
 # Spider_Telegram
-Araña para extracción de precios, desarrollada para utilización conjunta de bot en telegram.
-Dispone de los siguientes comandos:
+Spider for price extraction, developed for joint use of bot in telegram.
+It has the following commands:
 
-/exportar -> Exporta la lista obtenida en un fichero llamado productos.json
-
-
-/lectura -> Lee el fichero json e importa a la lista los datos
+/exportar -> Export the list obtained in a file called products.json
 
 
-/getprecios -> Lee de la lista AsyncList las urls y mete los datos en la inicial
+/lectura -> Read the json file and import the data into the list
 
 
-/sondear -> sondea la lista inicial con los precios actuales, en caso de encontrar una bajada de precio en el producto avisa por mensaje en telegram.
+/getprecios -> Read the urls from the AsyncList list and enter the data in the initial
 
 
-/resetear -> Resetea la lista de precios.
+/sondear -> poll the initial list with the current prices, in case of finding a price drop in the product, notify by message on telegram.
 
 
-#Como utilizar:
-Si no tienes aun el fichero productos.json:
-  1) Pon tu Token ID de telegram, e inicia el bot junto al bot.py
-  2) Pega la url completa en el chat de telegram, (puedes pegar tantas urls como desees).
-  3) Rellena la lista con el comando /getprecios
-  4) Exporta el fichero para en un futuro no tener que realizar los pasos 2 y 3.
-  5) Sondea en busca de precios.
-	
-	
-Si ya tienes el fichero creado:
-  1) Lee el fichero.
-  2) Inicia el sondeo.
+/resetear -> Reset the price list.
+
+
+#How to use:
+If you don't have the products.json file yet:
+  1) Put your telegram Token ID, and start the bot next to the bot.py
+  2) Paste the complete url in the telegram chat, (you can paste as many urls as you want).
+  3) Fill in the list with the command / get prices
+  4) Export the file so that in the future you don't have to perform steps 2 and 3.
+  5) Search for prices.
+
+
+If you already have the file created:
+  1) Read the file.
+  2) Start polling.
